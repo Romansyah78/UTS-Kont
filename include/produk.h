@@ -1,22 +1,30 @@
-#include <cstdint>
-#include <string>
-using namespace std;
+#ifndef PRODUK_H
+#define PRODUK_H
 
-struct tanggal{
+#include <string>
+#include <cstdint>
+
+// Kapasitas maksimum array produk
+const int MAX_PRODUK = 110;
+
+// Struct bersarang untuk menyimpan tanggal
+struct tanggal {
     int hari;
     int bulan;
     int tahun;
 };
+
+// Struct utama untuk data produk
 struct produk {
     tanggal tgl_ditambahkan;
     uint16_t harga;
     uint16_t stok;
-    string kategori;
-    string nama_produk;
-    string deskripsi;
-    string merk_produk;
-    string mata_uang;
+    std::string kategori;
+    std::string nama_produk;
+    std::string deskripsi;
+    std::string merk_produk;
+    std::string mata_uang;
     int index;
 };
 
-int bacaCSV(produk daftarProduk[110]);
+#endif // PRODUK_H
