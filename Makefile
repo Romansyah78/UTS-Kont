@@ -1,10 +1,10 @@
 CXX ?= g++
 CXXFLAGS ?= -std=c++11 -Wall -Wextra -pedantic
-CPPFLAGS ?= -Ihelpers
+CPPFLAGS ?= -Iinclude
 
-TARGET := produk
-SOURCE := program/produk.cpp
-HEADER := helpers/produk.h
+TARGET := produk.exe
+SOURCE := src/main.cpp
+HEADER := include/produk.h
 
 .PHONY: all run clean
 
@@ -17,4 +17,4 @@ run: $(TARGET)
 	./$(TARGET)
 
 clean:
-	rm -f $(TARGET) $(TARGET).exe
+	rm -f $(TARGET)
