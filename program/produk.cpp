@@ -4,15 +4,12 @@
 
 #include "produk.h"
 #include "tampilan.h"
+#include "editData.h"
 
 using namespace std;
 
 int bacaCSV(produk listProduk[110]) {
     ifstream file("data/products-duplicates-100.csv");
-    if (!file.is_open()) {
-        cout << "File CSV tidak dapat dibuka" << endl;
-        return -1;
-    }
 
     string line;
     if (!getline(file, line)) {
@@ -21,11 +18,8 @@ int bacaCSV(produk listProduk[110]) {
     }
 
     int jumlahProduk = 0;
+    bool somethingChange = false;
     while (getline(file, line)) {
-        if (line.empty()) {
-            continue;
-        }
-
         string kolomData[11];
         size_t trackJmlKolom = 0;
         string nilai;
@@ -49,20 +43,28 @@ int bacaCSV(produk listProduk[110]) {
         }
         kolomData[trackJmlKolom++] = nilai;
 
-        if (trackJmlKolom < 11) {
+        if (trackJmlKolom < 11 || trackJmlKolom > 11) {
             continue;
         }
 
         if (jumlahProduk >= 110) {
-            cout << "Jumlah produk melebihi kapasitas array" << endl;
+            cout << "Data melebihi kapasitas array" << endl;
             return -1;
         }
-
-        int harga = stoi(kolomData[5]);
-        int stok = stoi(kolomData[7]);
-
+        int harga, stok, index, tahun, bulan, hari;
+        try{
+            harga = stoi(kolomData[5]);
+            stok = stoi(kolomData[7]);
+            index = stoi(kolomData[0]);
+            tahun = stoi(kolomData[8]);
+            bulan = stoi(kolomData[9]);
+            hari = stoi(kolomData[10]);
+        } catch(...){
+            somethingChange = true;
+            continue;
+        }
         produk item{};
-        item.index = stoi(kolomData[0]);
+        item.index = index;
         item.nama_produk = kolomData[1];
         item.deskripsi = kolomData[2];
         item.merk_produk = kolomData[3];
@@ -70,13 +72,43 @@ int bacaCSV(produk listProduk[110]) {
         item.harga = static_cast<uint16_t>(harga);
         item.mata_uang = kolomData[6];
         item.stok = static_cast<uint16_t>(stok);
-        item.tgl_ditambahkan.tahun = stoi(kolomData[8]);
-        item.tgl_ditambahkan.bulan = stoi(kolomData[9]);
-        item.tgl_ditambahkan.hari = stoi(kolomData[10]);
+        item.tgl_ditambahkan.tahun = tahun;
+        item.tgl_ditambahkan.bulan = bulan;
+        item.tgl_ditambahkan.hari = hari;
         listProduk[jumlahProduk] = item;
         jumlahProduk++;
     }
-
+    for(int i = 0; i < jumlahProduk; i++){
+        for(int j = i + 1; j < jumlahProduk; j++){
+            if(listProduk[i].index == listProduk[j].index || toLower(listProduk[i].nama_produk) == toLower(listProduk[j].nama_produk)){
+                somethingChange = true;
+                if(listProduk[i].tgl_ditambahkan.tahun > listProduk[j].tgl_ditambahkan.tahun || 
+                   (listProduk[i].tgl_ditambahkan.tahun == listProduk[j].tgl_ditambahkan.tahun && listProduk[i].tgl_ditambahkan.bulan > listProduk[j].tgl_ditambahkan.bulan) ||
+                   (listProduk[i].tgl_ditambahkan.tahun == listProduk[j].tgl_ditambahkan.tahun && listProduk[i].tgl_ditambahkan.bulan == listProduk[j].tgl_ditambahkan.bulan && listProduk[i].tgl_ditambahkan.hari > listProduk[j].tgl_ditambahkan.hari)){
+                    for(int k = j; k < jumlahProduk - 1; k++){
+                        listProduk[k] = listProduk[k + 1];
+                    }
+                    jumlahProduk--;
+                    j--;
+                } else {
+                    for(int k = i; k < jumlahProduk - 1; k++){
+                        listProduk[k] = listProduk[k + 1];
+                    }
+                    jumlahProduk--;
+                    i--;
+                    break;
+                }
+            }
+        }
+    }
+    if(somethingChange){
+        for(int i = 0; i < jumlahProduk; i++){
+            if(listProduk[i].index != i + 1){
+                listProduk[i].index = i + 1;
+            }
+        }
+        saveCSV(listProduk, jumlahProduk);
+    }
     return jumlahProduk;
 }
 
