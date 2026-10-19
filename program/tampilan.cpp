@@ -7,6 +7,10 @@
 #include "produk.h"
 
 using namespace std;
+string toLower(string str) {
+    for (char &c : str) c = tolower(c);
+    return str;
+}
 
 string potongTeks(string teks, size_t lebar) {
     if (teks.size() <= lebar) return teks;

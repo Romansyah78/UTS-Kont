@@ -9,13 +9,23 @@ using namespace std;
 
 int bacaCSV(produk listProduk[110]) {
     ifstream file("data/products-duplicates-100.csv");
+    if (!file.is_open()) {
+        cout << "File CSV tidak dapat dibuka" << endl;
+        return -1;
+    }
+
     string line;
     if (!getline(file, line)) {
         cout << "File CSV kosong" << endl;
         return -1;
     }
+
     int jumlahProduk = 0;
     while (getline(file, line)) {
+        if (line.empty()) {
+            continue;
+        }
+
         string kolomData[11];
         size_t trackJmlKolom = 0;
         string nilai;
@@ -24,7 +34,7 @@ int bacaCSV(produk listProduk[110]) {
         for (size_t i = 0; i < line.size(); i++) {
             char karakter = line[i];
             if (karakter == '"') {
-                if (diDalamKutipan && line[i + 1] == '"') {
+                if (diDalamKutipan && i + 1 < line.size() && line[i + 1] == '"') {
                     nilai += '"';
                     i++;
                 } else {
@@ -38,6 +48,11 @@ int bacaCSV(produk listProduk[110]) {
             }
         }
         kolomData[trackJmlKolom++] = nilai;
+
+        if (trackJmlKolom < 11) {
+            continue;
+        }
+
         if (jumlahProduk >= 110) {
             cout << "Jumlah produk melebihi kapasitas array" << endl;
             return -1;
@@ -73,7 +88,7 @@ int cariProduk(produk daftarProduk[110], int jumlahProduk, int pilihan){
         cin.ignore();
         getline(cin, namaProduk);
         for (int i = 0; i < jumlahProduk; i++) {
-            if (daftarProduk[i].nama_produk.find(namaProduk) != string::npos) {
+            if (toLower(daftarProduk[i].nama_produk).find(toLower(namaProduk)) != string::npos) {
                 daftarProduk[counter] = daftarProduk[i];
                 counter++;
             }
@@ -84,7 +99,7 @@ int cariProduk(produk daftarProduk[110], int jumlahProduk, int pilihan){
         cin.ignore();
         getline(cin, kategoriProduk);
         for (int i = 0; i < jumlahProduk; i++) {
-            if (daftarProduk[i].kategori.find(kategoriProduk) != string::npos) {
+            if (toLower(daftarProduk[i].kategori).find(toLower(kategoriProduk)) != string::npos) {
                 daftarProduk[counter] = daftarProduk[i];
                 counter++;
             }
@@ -100,11 +115,13 @@ void sortProduk(produk daftarProduk[110], int jumlahProduk, int sortBy, int sort
         for (int j = 0; j < jumlahProduk - i - 1; j++) {
             bool shouldSwap = false;
             if (sortBy == 1) {
-                shouldSwap = (sortForm == 1) ? (daftarProduk[j].nama_produk > daftarProduk[j + 1].nama_produk) : (daftarProduk[j].nama_produk < daftarProduk[j + 1].nama_produk);
+                shouldSwap = (sortForm == 1)
+                    ? (daftarProduk[j].stok > daftarProduk[j + 1].stok)
+                    : (daftarProduk[j].stok < daftarProduk[j + 1].stok);
             } else if (sortBy == 2) {
-                shouldSwap = (sortForm == 1) ? (daftarProduk[j].kategori > daftarProduk[j + 1].kategori) : (daftarProduk[j].kategori < daftarProduk[j + 1].kategori);
-            } else if (sortBy == 3) {
-                shouldSwap = (sortForm == 1) ? (daftarProduk[j].harga > daftarProduk[j + 1].harga) : (daftarProduk[j].harga < daftarProduk[j + 1].harga);
+                shouldSwap = (sortForm == 1)
+                    ? (daftarProduk[j].harga > daftarProduk[j + 1].harga)
+                    : (daftarProduk[j].harga < daftarProduk[j + 1].harga);
             }
 
             if (shouldSwap) {

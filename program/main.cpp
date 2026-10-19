@@ -1,7 +1,10 @@
 #include<iostream>
+#include <limits>
 
+#include "editData.h"
 #include "produk.h"
 #include "tampilan.h"
+#include "statistikAndMemory.h"
 
 using namespace std;
 
@@ -13,9 +16,11 @@ int main() {
     cout << "1. Tampilkan Data" << endl;
     cout << "2. Ubah Data" << endl;
     cout << "3. Tampilkan Statistik" << endl;
+    cout << "4. Tampilkan Memori" << endl;
     cout << "" << endl;
     cout << "Masukkan nomor pilihan: ";
     cin >> interaksi;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
     if(interaksi == 1) {
         cout << "Filter:" << endl;
@@ -26,9 +31,8 @@ int main() {
         cin >> filter;
 
         cout << "Sort by:" << endl;
-        cout << "1. Name" << endl;
-        cout << "2. Category" << endl;
-        cout << "3. Price" << endl;
+        cout << "1. Stock" << endl;
+        cout << "2. Price" << endl;
         cout << "" << endl;
         cout << "Masukkan nomor pilihan: ";
         cin >> sortBy;
@@ -49,6 +53,8 @@ int main() {
         buatTabel(daftarProduk, jumlahProdukDitemukan);
 
     } else if(interaksi == 2) {
+        produk daftarProduk[110];
+        int jumlahProduk = bacaCSV(daftarProduk);
         cout << "Interaksi Ubah:" << endl;
         cout << "1. Tambah Data" << endl;
         cout << "2. Hapus Data" << endl;
@@ -57,15 +63,21 @@ int main() {
         cin >> ubahAction;
 
         if(ubahAction == 1) {
-            //tambahProduk();
+            tambahData(daftarProduk, jumlahProduk);
         } else if(ubahAction == 2) {
-           // hapusProduk();
+            hapusData(daftarProduk, jumlahProduk);
         } else if(ubahAction == 3) {
-           // editProduk();
+            editData(daftarProduk, jumlahProduk);
         } else {
             cout << "Pilihan tidak valid" << endl;
         }
-    } else {
+    } else if(interaksi == 3) {
+        produk daftarProduk[110];
+        int jumlahProduk = bacaCSV(daftarProduk);
+        printStatistik(daftarProduk, jumlahProduk);
+    } else if(interaksi == 4){
+        printMemori();
+    } else{
         cout << "Pilihan tidak valid" << endl;
     }
 

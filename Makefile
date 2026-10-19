@@ -2,9 +2,9 @@ CXX ?= g++
 CXXFLAGS ?= -std=c++11 -Wall -Wextra -pedantic
 CPPFLAGS ?= -Ihelpers
 
-TARGET := produk
-SOURCES := program/main.cpp program/produk.cpp program/tampilan.cpp
-HEADERS := helpers/produk.h helpers/tampilan.h
+TARGET := produk.exe
+SOURCES := $(wildcard program/*.cpp)
+HEADERS := $(wildcard helpers/*.h)
 
 .PHONY: all run clean
 
@@ -17,4 +17,4 @@ run: $(TARGET)
 	./$(TARGET)
 
 clean:
-	rm -f $(TARGET) $(TARGET).exe
+	$(RM) $(TARGET)
