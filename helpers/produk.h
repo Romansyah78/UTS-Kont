@@ -1,5 +1,8 @@
 #include <cstdint>
 #include <string>
+
+#pragma once
+
 using namespace std;
 
 struct tanggal{
@@ -20,3 +23,5 @@ struct produk {
 };
 
 int bacaCSV(produk daftarProduk[110]);
+int cariProduk(produk daftarProduk[110], int jumlahPencarianDitemukan, int pilihan);
+void sortProduk(produk daftarProduk[110], int jumlahProduk, int sortBy, int sortForm);

@@ -3,15 +3,15 @@ CXXFLAGS ?= -std=c++11 -Wall -Wextra -pedantic
 CPPFLAGS ?= -Ihelpers
 
 TARGET := produk
-SOURCE := program/produk.cpp
-HEADER := helpers/produk.h
+SOURCES := program/main.cpp program/produk.cpp program/tampilan.cpp
+HEADERS := helpers/produk.h helpers/tampilan.h
 
 .PHONY: all run clean
 
 all: $(TARGET)
 
-$(TARGET): $(SOURCE) $(HEADER)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(SOURCE) -o $(TARGET)
+$(TARGET): $(SOURCES) $(HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(SOURCES) -o $(TARGET)
 
 run: $(TARGET)
 	./$(TARGET)
