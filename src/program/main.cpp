@@ -13,6 +13,7 @@ int main() {
     int filter, sortBy, sortForm;
     int ubahAction;
     cout << "Pilih Interaksi:" << endl;
+    cout << "0. Tampilkan Seluruh Data" << endl;
     cout << "1. Tampilkan Data" << endl;
     cout << "2. Ubah Data" << endl;
     cout << "3. Tampilkan Statistik" << endl;
@@ -22,7 +23,12 @@ int main() {
     cin >> interaksi;
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-    if(interaksi == 1) {
+    if(interaksi == 0) {
+        produk daftarProduk[110];
+        int jumlahProduk = bacaCSV(daftarProduk);
+        tampilkanSemuaProduk(daftarProduk, jumlahProduk);
+    } 
+    else if(interaksi == 1) {
         cout << "Filter:" << endl;
         cout << "1. Search by Name" << endl;
         cout << "2. Search by Category" << endl;

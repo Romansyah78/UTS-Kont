@@ -25,3 +25,4 @@ struct produk {
 int bacaCSV(produk daftarProduk[110]);
 int cariProduk(produk daftarProduk[110], int jumlahPencarianDitemukan, int pilihan);
 void sortProduk(produk daftarProduk[110], int jumlahProduk, int sortBy, int sortForm);
+void tampilkanSemuaProduk(produk daftarProduk[110], int jumlahProduk);

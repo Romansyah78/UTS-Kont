@@ -9,7 +9,7 @@
 using namespace std;
 
 int bacaCSV(produk listProduk[110]) {
-    ifstream file("data/products-duplicates-100.csv");
+    ifstream file("data/data.csv");
 
     string line;
     if (!getline(file, line)) {
@@ -101,12 +101,13 @@ int bacaCSV(produk listProduk[110]) {
             }
         }
     }
-    if(somethingChange){
-        for(int i = 0; i < jumlahProduk; i++){
-            if(listProduk[i].index != i + 1){
-                listProduk[i].index = i + 1;
-            }
+    for(int i = 0; i < jumlahProduk; i++){
+        if(listProduk[i].index != i + 1){
+            listProduk[i].index = i + 1;
+            somethingChange = true;
         }
+    }
+    if(somethingChange){
         saveCSV(listProduk, jumlahProduk);
     }
     return jumlahProduk;
@@ -161,4 +162,12 @@ void sortProduk(produk daftarProduk[110], int jumlahProduk, int sortBy, int sort
             }
         }
     }
+}
+
+void tampilkanSemuaProduk(produk daftarProduk[110], int jumlahProduk) {
+    if (jumlahProduk <= 0) {
+        cout << "Produk kosong" << endl;
+        return;
+    }
+    buatTabel(daftarProduk, jumlahProduk);
 }

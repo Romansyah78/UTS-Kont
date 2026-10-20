@@ -23,7 +23,7 @@ string escapeTextInput(string input) {
 }
 
 void saveCSV(produk daftarProduk[110], int jumlahData) {
-    ofstream file("data/products-duplicates-100.csv");
+    ofstream file("data/data.csv");
 
     file << "Index,Name,Description,Brand,Category,Price,Currency,Stock,Tahun,Bulan,Tanggal\n";
 
@@ -56,9 +56,13 @@ void hapusData(produk daftarProduk[110], int jumlahData) {
         cout << "Index tidak valid" << endl;
         return;
     }
+    index--;
 
-    for (int i = index; i < jumlahData - 1; ++i) {
+    for (int i = index; i < jumlahData - 1; i++) {
         daftarProduk[i] = daftarProduk[i + 1];
+    }
+    for (int i = 0; i < jumlahData - 1; i++) {
+        daftarProduk[i].index = i + 1;
     }
     saveCSV(daftarProduk, jumlahData - 1);
 }
@@ -134,7 +138,7 @@ void editData(produk daftarProduk[110], int jumlahData) {
         cout << "Index tidak valid" << endl;
         return;
     }
-
+    index--;
     produk item = daftarProduk[index];
     cout << "Pilih data yang ingin diedit:" << endl;
     cout << "1. Nama Produk" << endl;
